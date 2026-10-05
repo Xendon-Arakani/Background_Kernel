@@ -1,0 +1,13 @@
+/build/
+/.vs/
+/out/
+/release/
+/build-release/
+/recordings/
+/.venv/
+__pycache__/
+*.py[cod]
+*.user
+*.suo
+*.VC.db
+*.VC.opendb

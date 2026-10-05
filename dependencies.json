@@ -1,0 +1,46 @@
+[
+  {
+    "id": "Microsoft.Windows",
+    "version": "10.0",
+    "license": "LicenseRef-Microsoft-Windows",
+    "scope": "runtime",
+    "bundled": false
+  },
+  {
+    "id": "MSVC.Runtime",
+    "version": "14.44",
+    "license": "LicenseRef-Microsoft-Visual-Studio",
+    "scope": "runtime",
+    "bundled": "static"
+  },
+  {
+    "id": "D3DCompiler",
+    "version": "47",
+    "license": "LicenseRef-Microsoft-Windows",
+    "scope": "runtime",
+    "bundled": false
+  },
+  {
+    "id": "TsudaKageyu.MinHook",
+    "version": "1.3.4",
+    "license": "BSD-2-Clause",
+    "scope": "source",
+    "bundled": false
+  },
+  {
+    "id": "numpy",
+    "version": "1.26.4",
+    "license": "BSD-3-Clause",
+    "scope": "research",
+    "bundled": false,
+    "optional": true
+  },
+  {
+    "id": "pytorch",
+    "version": "2.12.1",
+    "license": "BSD-3-Clause",
+    "scope": "research",
+    "bundled": false,
+    "optional": true
+  }
+]

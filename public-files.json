@@ -1,0 +1,532 @@
+[
+  {
+    "path": ".gitignore",
+    "bytes": 136,
+    "sha256": "e22571da931c7b54f6bbb0b899ef9e1e4d2238a2b6fce363346b74fcf0df14af"
+  },
+  {
+    "path": "CMakeLists.txt",
+    "bytes": 7959,
+    "sha256": "9413784629efa3ffe843612d4454aa46ef509f221929cb5be64e2b6ac6a578b2"
+  },
+  {
+    "path": "Install-Keypad.ps1",
+    "bytes": 2670,
+    "sha256": "58458a10678ac01eb43e3ed23d799163ee8d2d40c45ca3e845d1acec638cd8ae"
+  },
+  {
+    "path": "Pack.ps1",
+    "bytes": 3126,
+    "sha256": "a99799e44c42670ca99683ff3f7b7c72bbbf44094bc449a50c322b72ddc84ab6"
+  },
+  {
+    "path": "Remove-Keypad.cmd",
+    "bytes": 125,
+    "sha256": "eed4b34712cbe7599899191d90b52939e561bfdf2640e408d48283e26c3164a2"
+  },
+  {
+    "path": "Remove-Keypad.ps1",
+    "bytes": 691,
+    "sha256": "d3d2b45173f448b17e80d848571810d106aeccd4601b2da0acf8868856f3f89f"
+  },
+  {
+    "path": "Start-Keypad.cmd",
+    "bytes": 124,
+    "sha256": "4ff465d6f104e58163ffb4a011625af2cd952eb98757b506190fe1efa49b678b"
+  },
+  {
+    "path": "Start-Keypad.ps1",
+    "bytes": 1905,
+    "sha256": "55258875d2537b0095617d495e5d91e003d68ee7408bfa154622ecf64498d7dc"
+  },
+  {
+    "path": "Stop-Kernel.cmd",
+    "bytes": 662,
+    "sha256": "2fe44c10f99a0d011f10717ed6784b0e992db3654b567fe1844befebe8373f04"
+  },
+  {
+    "path": "policy/NoComments.cpp",
+    "bytes": 6049,
+    "sha256": "72b5049b13a7478fbf4e0bbed2a0fe1d038cdf2fef914f39726a915c94503d3a"
+  },
+  {
+    "path": "raw_pcm_forecast/lag_feedback/lag_forecast_cuda.cu",
+    "bytes": 3353,
+    "sha256": "c6d6d101cd7f7df7000688c49df3258e7d64d56e955414e3bf48431a2cb391ea"
+  },
+  {
+    "path": "raw_pcm_forecast/lag_feedback/lag_forecaster.py",
+    "bytes": 11379,
+    "sha256": "ad5247356d3625ba4bf72c8ce4ca51dcaa0ba3e627813a03fced1969b0d330a0"
+  },
+  {
+    "path": "raw_pcm_forecast/lag_feedback/live_lag_train.py",
+    "bytes": 5834,
+    "sha256": "279747304c78eb15d8be18aecaa80fef4c44d61e62a17d2746c3705e8280adae"
+  },
+  {
+    "path": "raw_pcm_forecast/lag_feedback/model_state_store.py",
+    "bytes": 3013,
+    "sha256": "37ae7b823d7a15712ab96ed2985de6aa8d3fb8cef445faaf308dc73d849f5944"
+  },
+  {
+    "path": "raw_pcm_forecast/lag_feedback/recorded_lag_train.py",
+    "bytes": 6261,
+    "sha256": "62f509151fbc2d3d2e222ee0beb30a9bb654c4b373738209a7e5566355a985ab"
+  },
+  {
+    "path": "raw_pcm_forecast/raw_history/RuntimeDeps.pip",
+    "bytes": 30,
+    "sha256": "9ecfe726dc000fa259c23fcccb78ba89dc2fd866e02da417e9a6836a840839ba"
+  },
+  {
+    "path": "raw_pcm_forecast/raw_history/audio_capture.py",
+    "bytes": 9568,
+    "sha256": "f6415f5322e95da89e8548015140158d5a118f939ccfa3f6b5759ee7a1d3516b"
+  },
+  {
+    "path": "raw_pcm_forecast/raw_history/capture_train_pair.py",
+    "bytes": 1166,
+    "sha256": "5b0089fb02a2981a777aff3d9f9c64c408570aa2f81291c181a542930cd0aa68"
+  },
+  {
+    "path": "raw_pcm_forecast/raw_history/checkpoint_store.py",
+    "bytes": 4216,
+    "sha256": "bd4b9bb57222aabebcf9aba59607041a682dd317836bcc916777db3fdaa1a3fa"
+  },
+  {
+    "path": "raw_pcm_forecast/raw_history/context_model.py",
+    "bytes": 3870,
+    "sha256": "ef0e1a1c010212c7bca84f5b9466e8af69b1b5eca34ba4baad36aa53e8e33859"
+  },
+  {
+    "path": "raw_pcm_forecast/raw_history/frame_forecast_clock.py",
+    "bytes": 9507,
+    "sha256": "0e1e2a8366b569e5088294b651639ade544c813b3134c71565fc69ba089dbadf"
+  },
+  {
+    "path": "raw_pcm_forecast/raw_history/frame_forecast_cuda.cu",
+    "bytes": 3995,
+    "sha256": "9813a857d4222db24aad89535e2bf7c56ffcd3edc293e638b4f4761e5b16b031"
+  },
+  {
+    "path": "raw_pcm_forecast/raw_history/history_decode.py",
+    "bytes": 1786,
+    "sha256": "14acd4515df56243ca78fd235f7f1b43282121254e7007a9d7618edc1e655953"
+  },
+  {
+    "path": "raw_pcm_forecast/raw_history/history_model.py",
+    "bytes": 4293,
+    "sha256": "f5cf6530a628de4e1b91a999874ea3c24e839fa6c7e7b7623c4ba82086c0509b"
+  },
+  {
+    "path": "raw_pcm_forecast/raw_history/live_frame_forecast.py",
+    "bytes": 6608,
+    "sha256": "6934555f447e93a2af392732c354b378d8d8cb22c293b4e340a5b7a81d9db72f"
+  },
+  {
+    "path": "raw_pcm_forecast/raw_history/live_horizon_train.py",
+    "bytes": 10100,
+    "sha256": "ca9d15c219d405cfc9c41225af7c082d25e35876a082f3d7501e20f441a8370f"
+  },
+  {
+    "path": "raw_pcm_forecast/raw_history/live_mse_train.py",
+    "bytes": 5451,
+    "sha256": "23cb7dfdace759bd090b7fab1db33617dd156076df578a58637701a63dd8f8a8"
+  },
+  {
+    "path": "raw_pcm_forecast/raw_history/mature_mse_kernels.cu",
+    "bytes": 6728,
+    "sha256": "baa3ed9dafdf056dd12717252517767afce04639876fbb76e14fcd5c18c541e3"
+  },
+  {
+    "path": "raw_pcm_forecast/raw_history/mature_mse_train.py",
+    "bytes": 10913,
+    "sha256": "5f483ccad3c138dcd479902be9c300cf09e3b87f01750961d98f797323bf6638"
+  },
+  {
+    "path": "raw_pcm_forecast/raw_history/migrate_context.py",
+    "bytes": 2183,
+    "sha256": "caea92e13dbf316c9e7b8310ec182f78f97dbfe32cace55084b9f2647a14a6ed"
+  },
+  {
+    "path": "raw_pcm_forecast/raw_history/migrate_tanh.py",
+    "bytes": 1715,
+    "sha256": "eb507e18def5b404bf1e5c04f2b319ae37768bfb2ff8cbb1b2b55c900a7fb220"
+  },
+  {
+    "path": "raw_pcm_forecast/raw_history/torch_cuda_runtime.py",
+    "bytes": 4826,
+    "sha256": "6cfec9ad829ec4730a18d7d9dbef500a3e57ccd3e7d389929499149f6cf824eb"
+  },
+  {
+    "path": "raw_pcm_forecast/raw_history/train_state.py",
+    "bytes": 4204,
+    "sha256": "be5c997a2869c8aaa02525e1d0340032c2aa7ddfee5a75fff867059baa711480"
+  },
+  {
+    "path": "raw_pcm_forecast/raw_history/window_encode.py",
+    "bytes": 3163,
+    "sha256": "2e185b8951bc5fe470500ce73006aa2b6663619c4af91ab6a80db390ffc89b2c"
+  },
+  {
+    "path": "src/app/AppVersion.rc",
+    "bytes": 632,
+    "sha256": "01da16c43d5123087c4995e9262630f99b2ea7e0513bcd04cb3e6d5027352f3d"
+  },
+  {
+    "path": "src/app/BakeRoomLightMain.cpp",
+    "bytes": 408,
+    "sha256": "fc7161c6aecf9f45f196d73f8bfe0be4412fe4eef000eb991248ded65e8cd670"
+  },
+  {
+    "path": "src/app/DelayRecorderMain.cpp",
+    "bytes": 6561,
+    "sha256": "81ceacd0557177868905bcf26a15c0ad6d7858e467849071201bb593cb1ae0dd"
+  },
+  {
+    "path": "src/app/DesktopBackdrop.hpp",
+    "bytes": 9674,
+    "sha256": "07fe22f06b41287f5015cf7bdc8c91d31a57a7044918f535ec736904a55ecd06"
+  },
+  {
+    "path": "src/app/DesktopPointer.hpp",
+    "bytes": 2097,
+    "sha256": "b3a3d0e3b49484c8f016940ad9d09941e6f95c4208b0e9760cf7ccc62818889e"
+  },
+  {
+    "path": "src/app/FutureAudioMain.cpp",
+    "bytes": 4812,
+    "sha256": "ebf059aae33ac77703a7be829b5d22fa97fd2fc8a4e846757e0eb22e14f1d77d"
+  },
+  {
+    "path": "src/app/HdrSceneMain.cpp",
+    "bytes": 46329,
+    "sha256": "f4e3b3e250f472e7ac41f9354c43259d680018eeef1e2ad51ce740eb7f1e72ed"
+  },
+  {
+    "path": "src/app/KeypadMain.cpp",
+    "bytes": 15369,
+    "sha256": "e12e956e207b8f607ef47ecc18899e257ac40d481e76a9afb393794bbbe576cc"
+  },
+  {
+    "path": "src/app/SceneKernel.manifest",
+    "bytes": 472,
+    "sha256": "b24ce8fefc4c04e469fd3166524ad606f684df661820627b21f9d54f350813fc"
+  },
+  {
+    "path": "src/app/SceneKernelMain.cpp",
+    "bytes": 9159,
+    "sha256": "a08ab27dad7626277c7d0d7cd304ae65cc4df6df20374fa0e6bfc229cf486339"
+  },
+  {
+    "path": "src/app/SceneProcess.hpp",
+    "bytes": 12378,
+    "sha256": "79b84c6483398cba391e98f9cb014acfdd9ddd008e240f97b802c2a76931e571"
+  },
+  {
+    "path": "src/app/SceneSettingsPanel.hpp",
+    "bytes": 31667,
+    "sha256": "da5c69b14529935cd02247939650a999fff9bb1e20d05fcedd1b1f499413e926"
+  },
+  {
+    "path": "src/app/SceneSignals.hpp",
+    "bytes": 1011,
+    "sha256": "9397b7ccb65216c1a200a3f22a75e9ef3c4d8b815e4e1942a39df99a37759c80"
+  },
+  {
+    "path": "src/app/StrokeLabMain.cpp",
+    "bytes": 33817,
+    "sha256": "21f92ed998dadc4a80f3ab933bff7e1308de56e8f49fdfa1e8289c2736c75c1e"
+  },
+  {
+    "path": "src/audio/AudioCapture.hpp",
+    "bytes": 5051,
+    "sha256": "c4fb828c004905f140f4c230401069152137a714a00e2821a3401684f64bd0be"
+  },
+  {
+    "path": "src/audio/AudioLoopback.cpp",
+    "bytes": 11190,
+    "sha256": "c30fc43809648e2743eb2572fedd6e57b28c2f65ba07e63b203124346fe175e7"
+  },
+  {
+    "path": "src/audio/AudioLoopback.hpp",
+    "bytes": 1448,
+    "sha256": "dbb1f815c1ba17eb2ab6cbb8056fd60b2511e84ae953271dc7d3ebe83f34e616"
+  },
+  {
+    "path": "src/audio/FutureDelay.hpp",
+    "bytes": 3256,
+    "sha256": "93c4a6151a757381052e7cdb566ab0498a6627c2df24fa2028c2e541295c6a16"
+  },
+  {
+    "path": "src/audio/PcmRecord.cpp",
+    "bytes": 6710,
+    "sha256": "de125bd522f6900e5137eaafe13200480be6ce4b7e115347a1c10f62b7ef99ae"
+  },
+  {
+    "path": "src/audio/PcmRecord.hpp",
+    "bytes": 1674,
+    "sha256": "422e863ad6c5808c985b19db32b570af6337b6275660b9d319555da046e656e1"
+  },
+  {
+    "path": "src/audio/RawStereoPcm.hpp",
+    "bytes": 539,
+    "sha256": "526d97d457e39bfaa10940fbde4149bae9baca88e743b55e0ed6c42da2c24a12"
+  },
+  {
+    "path": "src/audio/SourcePcmPacket.hpp",
+    "bytes": 335,
+    "sha256": "475314f6219da6dad5c4f9d06b90fafe554f2327a90f7f78a6e2bdcd87c015a2"
+  },
+  {
+    "path": "src/common/DwmTarget.hpp",
+    "bytes": 296,
+    "sha256": "bc08752f96eaa28db3fb22909e4dd3799bbc379ddf6998f9d94cba492b6294ac"
+  },
+  {
+    "path": "src/dwm_hook/DwmHookModule.cpp",
+    "bytes": 1059,
+    "sha256": "e6c977d136edc868860d1beb908c7aa93c5408e212f875f4300667dfa940f533"
+  },
+  {
+    "path": "src/dwm_hook/HookRenderer.cpp",
+    "bytes": 26984,
+    "sha256": "06228bacdbeee0587e5baaa4ac7048597fd71217c633541d40123b585b4cb6bc"
+  },
+  {
+    "path": "src/dwm_hook/HookRenderer.hpp",
+    "bytes": 3376,
+    "sha256": "76bdfe50143b6e3a8e822f6355b21835b860cd047819370f9642652c93f19ce2"
+  },
+  {
+    "path": "src/dwm_hook/OutputHook.cpp",
+    "bytes": 18051,
+    "sha256": "7999bce69529e3d81905fb6023f5ad01334fa075ded62190a72435d487196971"
+  },
+  {
+    "path": "src/dwm_hook/OutputHook.hpp",
+    "bytes": 227,
+    "sha256": "c9858e0f29489785a30e68f4aaa3ec5f7b6925fe0f206bb7dc74f6de6d6f9bde"
+  },
+  {
+    "path": "src/dwm_hook_host/DwmHookHostMain.cpp",
+    "bytes": 18188,
+    "sha256": "760779a4fb9a229b474076b34e8577377954745ffdf8a13c0a1541c8437ee2d1"
+  },
+  {
+    "path": "src/dwm_hook_host/RemoteDwmHook.cpp",
+    "bytes": 20283,
+    "sha256": "a66ae7678c98ae7ce793da18ab75824abed1ed8a22f8fbd2adcfb76d57b00078"
+  },
+  {
+    "path": "src/dwm_hook_host/RemoteDwmHook.hpp",
+    "bytes": 2012,
+    "sha256": "8620fc3966db4bc30550b67b6fd4b489697d7d1ec590a2b96ab9a4e7dddc513f"
+  },
+  {
+    "path": "src/render/BakedRoomScene.cpp",
+    "bytes": 67079,
+    "sha256": "8128310fefff6b3833354ab1cc85698561774f20a6cef5297bcebf3660b0299f"
+  },
+  {
+    "path": "src/render/BakedRoomScene.hpp",
+    "bytes": 2621,
+    "sha256": "bec11e2114f16c2919d0ca4e262f08afcbfb39e78522a4a7a669e3d2d7fc05fb"
+  },
+  {
+    "path": "src/render/DisplayMath.hpp",
+    "bytes": 1790,
+    "sha256": "5cdf6d8ee7ffbc403a5c28be8e3a00c38b582ca9ef7e29ece354bbdad8a733b3"
+  },
+  {
+    "path": "src/render/HdrRoomRenderer.cpp",
+    "bytes": 46708,
+    "sha256": "ec1516478041c0b61e39564001999f805333dd8129486165df65debff863eb71"
+  },
+  {
+    "path": "src/render/HdrRoomRenderer.hpp",
+    "bytes": 4105,
+    "sha256": "1bbb0ee2fb1b5371e720796e97feaddefa26b5448f0d4883ff3de46d29f06aeb"
+  },
+  {
+    "path": "src/render/HdrSceneOutput.cpp",
+    "bytes": 7854,
+    "sha256": "7f3eb493e83fe465fbed41ec0e189da1c704b8840c78ba855541ff1a17431f8b"
+  },
+  {
+    "path": "src/render/HdrSceneOutput.hpp",
+    "bytes": 1001,
+    "sha256": "917d7d55693aa9b1557ffa21b47eb928d9472ac1b52419458249b7f11a3f5dee"
+  },
+  {
+    "path": "src/render/HdrToneMapper.hpp",
+    "bytes": 3741,
+    "sha256": "f892f1380a503d1b0893816234035e2afce78e29415c1e055c1ff56265581bb2"
+  },
+  {
+    "path": "src/render/PresentationSync.hpp",
+    "bytes": 352,
+    "sha256": "aa585aad39ac66ada9120c4a9cf117d3396ff0d070279094da3b69348e735bd7"
+  },
+  {
+    "path": "src/render/WallStrokeCanvas.cpp",
+    "bytes": 16712,
+    "sha256": "f55a5c9685f6b644788cf752ddb3200d055cb230d15034bd23a64f640c69eb03"
+  },
+  {
+    "path": "src/render/WallStrokeCanvas.hpp",
+    "bytes": 1688,
+    "sha256": "aeacef3134066f921f2b5acd78dc0a84e9a0e3a076c18ae391ec94be72fbbb6b"
+  },
+  {
+    "path": "src/scene/BakedRoomLight.cpp",
+    "bytes": 18443,
+    "sha256": "56e23b10c1e3ea9225d4c6539a6e4037b7b83601de68f9dbf2fe955316a93270"
+  },
+  {
+    "path": "src/scene/BakedRoomLight.hpp",
+    "bytes": 1439,
+    "sha256": "c00b810d490f81cc4ac095cbaa5964ae98698577947bef0ad5629d0d0718a3e2"
+  },
+  {
+    "path": "src/scene/EmitterTransport.hpp",
+    "bytes": 1869,
+    "sha256": "7e4e2c184b467d273b515aafef4e461dedc12b1bef1148445f9677116831d669"
+  },
+  {
+    "path": "src/scene/LineLight.hpp",
+    "bytes": 9190,
+    "sha256": "1ed8a4c4f6d457aae19b2c1ba1e05e3bc61eb06dfe888177718d7337957e2a8f"
+  },
+  {
+    "path": "src/scene/PaneOptics.hpp",
+    "bytes": 2583,
+    "sha256": "010cf87eea31d605ac1862bd6293928c53ddbc952d07a3acc8af9b4a3bddf30c"
+  },
+  {
+    "path": "src/scene/PhysicalUnits.hpp",
+    "bytes": 1681,
+    "sha256": "00f25e74fbe3b7e560cc39fdc770b084fb1be92090117c934c2d3a14efbd3b9f"
+  },
+  {
+    "path": "src/scene/RoomGeometry.hpp",
+    "bytes": 7977,
+    "sha256": "eed7d0cef6416601e37eac19f4beca24e7b4202201fe86a086e2cf3eee248c1c"
+  },
+  {
+    "path": "src/scene/TubeBvh.hpp",
+    "bytes": 3446,
+    "sha256": "78d9c8e2f2e11524e30decd4e78c693beb0cef0124a6bb7fac73243c53b4dca2"
+  },
+  {
+    "path": "src/scene/TubeGeometry.hpp",
+    "bytes": 4626,
+    "sha256": "b60024a19ff1b85ad8cc66d0a5c8d0c635b08f8aacfcdf3558995db37caef22c"
+  },
+  {
+    "path": "src/scene/WallField.hpp",
+    "bytes": 929,
+    "sha256": "5c1646506bdaf836bd785d1f28feaf99c7b7255d264677c66d97dffd521c894c"
+  },
+  {
+    "path": "src/stroke/RayOrigin.hpp",
+    "bytes": 3031,
+    "sha256": "5c230b680b1ea8dfb892cfb10efce57715249b37f529d1694ef6755f3db4c59a"
+  },
+  {
+    "path": "src/stroke/RoomWallStroke.hpp",
+    "bytes": 26113,
+    "sha256": "d03250b111920af98913c543d7afc421037f36a310e7944eb07d917c4aa6afe6"
+  },
+  {
+    "path": "src/stroke/StrokeAudioColor.hpp",
+    "bytes": 3208,
+    "sha256": "e3fdf0e536e9ae7f06d3614e7adbad478271bd0720966740d2a20170363df1a3"
+  },
+  {
+    "path": "src/stroke/WallStroke.hpp",
+    "bytes": 2372,
+    "sha256": "688286c85ad9cac287e8321aa86c313dfefb0eaef7ab21150615149ded49cc4b"
+  },
+  {
+    "path": "src/stroke/WallStrokeSettings.hpp",
+    "bytes": 8160,
+    "sha256": "5b29720245eb92d250947f6eab42da942876a0eac4e5676e258d15c096fea5b0"
+  },
+  {
+    "path": "src/tracking/HeadTrackState.hpp",
+    "bytes": 2508,
+    "sha256": "bcea14cd94defffe27a7fa7f7dd8c072fa8c01df08680dcb4dc2f111f4a805e2"
+  },
+  {
+    "path": "src/tracking/OpenTrackPose.cpp",
+    "bytes": 5260,
+    "sha256": "48ff75300996bd8233018526e1907fd30367c4999c297f6c6f31947ec7711b98"
+  },
+  {
+    "path": "src/tracking/OpenTrackPose.hpp",
+    "bytes": 2721,
+    "sha256": "965963db8bc754692f5bc98cc908fd8bb617ec6c223674a6932ec99bedc11fa5"
+  },
+  {
+    "path": "src/visualizer/AdaptiveTrail.hpp",
+    "bytes": 7183,
+    "sha256": "394a108bbe8db45dfe808b13f23e781d5681215dcbe00df6559fbae78648f34c"
+  },
+  {
+    "path": "src/visualizer/AudioSpectrum.hpp",
+    "bytes": 8103,
+    "sha256": "433476f9278e8d547160714d3b5256762f9bc198a835ff643f25a8dcf0887e4c"
+  },
+  {
+    "path": "src/visualizer/AudioTrailMotion.cpp",
+    "bytes": 5100,
+    "sha256": "73d2570c31503db5b6d5d38c0012a368749dde4ee2d503f43322e8521af7a178"
+  },
+  {
+    "path": "src/visualizer/AudioTrailMotion.hpp",
+    "bytes": 7874,
+    "sha256": "c060b514173f01ef9cb9b3ea67687effc3b9118eb8ffe70d7d011e35002dcf45"
+  },
+  {
+    "path": "src/visualizer/ContinuousMotion.hpp",
+    "bytes": 6659,
+    "sha256": "b907d733c4c9060ab65f8f671957ac45dc933b14e0c88fb0956fedd8770bcb9b"
+  },
+  {
+    "path": "src/visualizer/MoveSizeMap.hpp",
+    "bytes": 7648,
+    "sha256": "a3c95fe88cebdf5f63a6ffdb287b8c9202512c62b58ec03d70374c98636e69a3"
+  },
+  {
+    "path": "src/visualizer/PathPursuit.hpp",
+    "bytes": 7646,
+    "sha256": "b1a8c4029e02e235a35393e777854b79d203bb3c48864f2fd1e4b39ff0666743"
+  },
+  {
+    "path": "src/visualizer/QuinticMotion.hpp",
+    "bytes": 13323,
+    "sha256": "d84fc1238e7034fb8237b86e36a5228aa7e5914a8c29d3b1997d1eb86f28eb20"
+  },
+  {
+    "path": "src/visualizer/RainbowPalette.hpp",
+    "bytes": 1887,
+    "sha256": "91800135412012d5024cda8face7cfbbeaba0a35dc8bc1c3ad5c40c6262a71d0"
+  },
+  {
+    "path": "src/visualizer/SceneRunState.hpp",
+    "bytes": 2635,
+    "sha256": "bd3533e1cb6fb4429730cc14cb74dbaa7f87a06f703556140bdb07b4c904a0b8"
+  },
+  {
+    "path": "src/visualizer/SceneSettings.hpp",
+    "bytes": 17873,
+    "sha256": "619963504c69968b5a06777f688c5cddc34d7f8e10362e5a05315a1c0bf6fa8e"
+  },
+  {
+    "path": "src/visualizer/SpectralMapping.hpp",
+    "bytes": 4835,
+    "sha256": "4b87eb45efedca31f3f06ed531408ae9aa868bba07a8827a7cba740fe24758ad"
+  }
+]

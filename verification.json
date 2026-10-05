@@ -1,0 +1,54 @@
+{
+  "version": "0.1.0-progress.1",
+  "minimum_workflow_status": "pass",
+  "tests": [
+    {
+      "id": "packaged_window_opened",
+      "status": "pass"
+    },
+    {
+      "id": "meaningful_controls_available",
+      "status": "pass"
+    },
+    {
+      "id": "settings_save_committed",
+      "status": "pass"
+    },
+    {
+      "id": "pointer_draw_visible",
+      "status": "pass"
+    },
+    {
+      "id": "clear_canvas_removes_drawn_output",
+      "status": "pass"
+    },
+    {
+      "id": "packaged_workflow_remains_running",
+      "status": "pass"
+    },
+    {
+      "id": "clean_window_exit",
+      "status": "pass"
+    }
+  ],
+  "settings_restored": true,
+  "executable_sha256": "4cbfb9b298fdaee67542fcff1dd6e9a4cab75490fcc3f58002cf94a5e68cbfff",
+  "desktop_audio_scene_verified": false,
+  "clean_machine_verified": false,
+  "limitation_codes": [
+    "DESKTOP_AUDIO_SCENE_VISIBLE_OUTPUT_UNVERIFIED",
+    "AUDIO_SCENE_TELEMETRY_ONLY",
+    "TOP_LEVEL_VISUALIZER_NULL_CAPTURE",
+    "UNSIGNED_EXECUTABLES",
+    "SOURCE_LICENSE_UNSELECTED"
+  ],
+  "release_stage": "progress",
+  "public_package_allowlist_verified": true,
+  "desktop_visualizer_bundled": false,
+  "scheduled_task_helpers_bundled": false,
+  "sha256": {
+    "source_snapshot": "be42fdd2d37433c99551613782c663be6d8cc9d21875704bedab072aabf1171a",
+    "package": "9777e9b254266db445f79aa06d59b39437c446ea1e24ac7480816c2665f2aa9b",
+    "executable": "4cbfb9b298fdaee67542fcff1dd6e9a4cab75490fcc3f58002cf94a5e68cbfff"
+  }
+}
