@@ -326,13 +326,13 @@
   },
   {
     "path": "src/render/BakedRoomScene.cpp",
-    "bytes": 67079,
-    "sha256": "8128310fefff6b3833354ab1cc85698561774f20a6cef5297bcebf3660b0299f"
+    "bytes": 66675,
+    "sha256": "ba500e684dbea597631610bf2aae10475502be1602764ca2e20cc8f9799f441c"
   },
   {
     "path": "src/render/BakedRoomScene.hpp",
-    "bytes": 2621,
-    "sha256": "bec11e2114f16c2919d0ca4e262f08afcbfb39e78522a4a7a669e3d2d7fc05fb"
+    "bytes": 2622,
+    "sha256": "a3387865cf33e0532f9bc0c297f1ce16ebc3c94f0e35abdf2c90ea47d57c1a58"
   },
   {
     "path": "src/render/DisplayMath.hpp",
@@ -381,13 +381,13 @@
   },
   {
     "path": "src/scene/BakedRoomLight.cpp",
-    "bytes": 18443,
-    "sha256": "56e23b10c1e3ea9225d4c6539a6e4037b7b83601de68f9dbf2fe955316a93270"
+    "bytes": 14270,
+    "sha256": "bb1ca38110d895abf7432aeb8f8b3651fc0bae764d7b87d546acbca690e6a174"
   },
   {
     "path": "src/scene/BakedRoomLight.hpp",
-    "bytes": 1439,
-    "sha256": "c00b810d490f81cc4ac095cbaa5964ae98698577947bef0ad5629d0d0718a3e2"
+    "bytes": 1313,
+    "sha256": "5334152a8fa150fedda1c314e08de6be3fb4d22e5a47183373caf141115bbeb2"
   },
   {
     "path": "src/scene/EmitterTransport.hpp",
@@ -411,8 +411,8 @@
   },
   {
     "path": "src/scene/RoomGeometry.hpp",
-    "bytes": 7977,
-    "sha256": "eed7d0cef6416601e37eac19f4beca24e7b4202201fe86a086e2cf3eee248c1c"
+    "bytes": 7749,
+    "sha256": "c1bdede2de193e11e2c5f2d7ed954d58acdde1441d1a12a3b79c08fc00986c33"
   },
   {
     "path": "src/scene/TubeBvh.hpp",
@@ -426,8 +426,8 @@
   },
   {
     "path": "src/scene/WallField.hpp",
-    "bytes": 929,
-    "sha256": "5c1646506bdaf836bd785d1f28feaf99c7b7255d264677c66d97dffd521c894c"
+    "bytes": 1017,
+    "sha256": "3bfd05d846954350a333910dcbdb4b36d02600b7e5e4d3d0e8e2dc26aba9231a"
   },
   {
     "path": "src/stroke/RayOrigin.hpp",

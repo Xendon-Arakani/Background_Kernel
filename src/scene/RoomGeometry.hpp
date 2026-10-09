@@ -152,11 +152,6 @@ namespace bk::scene
                 std::lerp(hash(cellX,cellY+1,cellZ+1),hash(cellX+1,cellY+1,cellZ+1),blendX),blendY),
             blendZ);
     }
-    inline std::array<double,3> WallAlbedo(Vec p)
-    {
-        const double variation=AlbedoVariation*(2*MaterialNoise(p*(1.0/100.0))-1);
-        return {Albedo[0]+variation,Albedo[1]+variation,Albedo[2]+variation};
-    }
     inline double RaySphere(Vec eye, Vec ray, const Light& light)
     {
         const auto delta=light.position-eye;

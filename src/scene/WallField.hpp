@@ -1,20 +1,17 @@
 #pragma once
+#include "scene/RoomGeometry.hpp"
 #include <array>
 #include <cmath>
 #include <cstdint>
 
 namespace bk::scene
 {
-    enum class WallMode : std::uint32_t
-    {
-        Fixed,
-        Field
-    };
-
     struct WallField
     {
-        WallMode mode{WallMode::Fixed};
-        std::uint32_t passes{};
+        std::array<float,3> albedo{
+            static_cast<float>(Albedo[0]),
+            static_cast<float>(Albedo[1]),
+            static_cast<float>(Albedo[2])};
         float timeSec{};
         std::array<float,3> bands{};
         float level{};
@@ -24,8 +21,9 @@ namespace bk::scene
 
     inline bool ValidWallField(const WallField& field) noexcept
     {
-        if(field.mode!=WallMode::Fixed &&
-            field.mode!=WallMode::Field) return false;
+        for(const float channel:field.albedo)
+            if(!std::isfinite(channel) || channel<0 || channel>1)
+                return false;
         if(!std::isfinite(field.timeSec) ||
             !std::isfinite(field.level) ||
             !std::isfinite(field.balance) ||

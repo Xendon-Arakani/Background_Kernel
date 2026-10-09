@@ -1,54 +1,51 @@
 {
-  "version": "0.1.0-progress.1",
-  "minimum_workflow_status": "pass",
-  "tests": [
+  "version": "0.1.0-progress.2",
+  "release_stage": "progress",
+  "source_commit": "a00ffd2db0f4263ad223945ee903495aa74a72fe",
+  "source_file_count": 106,
+  "source_snapshot_hashes_verified": true,
+  "secret_scan_passed": true,
+  "build_configuration": "Release",
+  "build_architecture": "x64",
+  "comment_policy_test_pass": true,
+  "runtime_profile": "audiovisualizer",
+  "minimal_workflow_status": "pass",
+  "runtime_workflow": {
+    "source_commit": "a00ffd2db0f4263ad223945ee903495aa74a72fe",
+    "desktop_surface_visible": true,
+    "live_audio_capture_pass": true,
+    "frame_presentation_pass": true,
+    "audio_driven_motion_pass": true,
+    "presentations_observed": 821,
+    "captured_frames_observed": 273600,
+    "motion_range_mm": 1179.374,
+    "max_trail_points": 13,
+    "input_tone_hz": [
+      220,
+      880
+    ],
+    "settings_changed": false,
+    "scheduled_work_created": false,
+    "exit_code": 0
+  },
+  "runtime_files": [
     {
-      "id": "packaged_window_opened",
-      "status": "pass"
+      "path": "AudioScene.exe",
+      "bytes": 633856,
+      "sha256": "4c29ee72f0da711dfaebb4882b0a65e8a63eadcc65baff112fa762c3967e3586"
     },
     {
-      "id": "meaningful_controls_available",
-      "status": "pass"
-    },
-    {
-      "id": "settings_save_committed",
-      "status": "pass"
-    },
-    {
-      "id": "pointer_draw_visible",
-      "status": "pass"
-    },
-    {
-      "id": "clear_canvas_removes_drawn_output",
-      "status": "pass"
-    },
-    {
-      "id": "packaged_workflow_remains_running",
-      "status": "pass"
-    },
-    {
-      "id": "clean_window_exit",
-      "status": "pass"
+      "path": "BakedRoomLight.bin",
+      "bytes": 119081040,
+      "sha256": "1b1e4b4c6eb0cffbd5cd3cb9adf338746addc5828e1f699df53a8d0c40b43dab"
     }
   ],
-  "settings_restored": true,
-  "executable_sha256": "4cbfb9b298fdaee67542fcff1dd6e9a4cab75490fcc3f58002cf94a5e68cbfff",
-  "desktop_audio_scene_verified": false,
-  "clean_machine_verified": false,
-  "limitation_codes": [
-    "DESKTOP_AUDIO_SCENE_VISIBLE_OUTPUT_UNVERIFIED",
-    "AUDIO_SCENE_TELEMETRY_ONLY",
-    "TOP_LEVEL_VISUALIZER_NULL_CAPTURE",
-    "UNSIGNED_EXECUTABLES",
-    "SOURCE_LICENSE_UNSELECTED"
-  ],
-  "release_stage": "progress",
-  "public_package_allowlist_verified": true,
-  "desktop_visualizer_bundled": false,
+  "runtime_archive_crc_verified": true,
+  "desktop_visualizer_bundled": true,
   "scheduled_task_helpers_bundled": false,
-  "sha256": {
-    "source_snapshot": "be42fdd2d37433c99551613782c663be6d8cc9d21875704bedab072aabf1171a",
-    "package": "9777e9b254266db445f79aa06d59b39437c446ea1e24ac7480816c2665f2aa9b",
-    "executable": "4cbfb9b298fdaee67542fcff1dd6e9a4cab75490fcc3f58002cf94a5e68cbfff"
-  }
+  "clean_machine_verified": false,
+  "source_license_selected": false,
+  "authenticode_signed": false,
+  "published_source_line_endings": "existing-per-file",
+  "source_text_matches_frozen_snapshot": true
 }

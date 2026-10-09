@@ -10,11 +10,11 @@ namespace bk::scene
     namespace
     {
         constexpr std::uint64_t AssetMagic=0x54524f50534e4152;
-        constexpr std::uint64_t AssetSchema=1;
+        constexpr std::uint64_t AssetSchema=2;
         struct AssetHead
         {
             std::uint64_t magic{},schema{},patchCount{},formCount{};
-            std::uint64_t bounceCount{},wallCount{},pointCount{},hash{};
+            std::uint64_t wallCount{},pointCount{},hash{};
             double reciprocityError{},maxRowSum{},energyScale{};
         };
         std::uint64_t HashBytes(
@@ -41,7 +41,6 @@ namespace bk::scene
             auto hash=1469598103934665603ull;
             hash=HashList(hash,transport.patches);
             hash=HashList(hash,transport.formFactors);
-            hash=HashList(hash,transport.bounceResponse);
             hash=HashList(hash,transport.wallSamples);
             return HashList(hash,transport.pointFactors);
         }
@@ -95,7 +94,6 @@ namespace bk::scene
                 head.schema!=AssetSchema ||
                 head.patchCount!=patchCount ||
                 head.formCount!=formCount ||
-                head.bounceCount!=formCount ||
                 head.wallCount!=wallCount ||
                 head.pointCount!=pointCount)
                 throw std::runtime_error(
@@ -108,8 +106,6 @@ namespace bk::scene
                 static_cast<std::size_t>(head.patchCount));
             ReadList(stream,result.formFactors,
                 static_cast<std::size_t>(head.formCount));
-            ReadList(stream,result.bounceResponse,
-                static_cast<std::size_t>(head.bounceCount));
             ReadList(stream,result.wallSamples,
                 static_cast<std::size_t>(head.wallCount));
             ReadList(stream,result.pointFactors,
@@ -150,57 +146,6 @@ namespace bk::scene
                         receiver.normal,source);
             return result/4;
         }
-        std::vector<double> Inverse(
-            std::vector<double> matrix,std::size_t order)
-        {
-            std::vector<std::size_t> pivots(order);
-            std::iota(pivots.begin(),pivots.end(),0);
-            for (std::size_t pivotCol=0;pivotCol<order;++pivotCol)
-            {
-                std::size_t pivotRow=pivotCol;
-                for(std::size_t candidate=pivotCol+1;
-                    candidate<order;++candidate)
-                    if(std::abs(matrix[candidate*order+pivotCol])>
-                        std::abs(matrix[pivotRow*order+pivotCol]))
-                        pivotRow=candidate;
-                if (!(std::abs(matrix[pivotRow*order+pivotCol])>
-                    std::numeric_limits<double>::epsilon()))
-                    throw std::runtime_error("Singular room transport");
-                if(pivotRow!=pivotCol) {
-                    for(std::size_t column=0;column<order;++column)
-                        std::swap(matrix[pivotCol*order+column],
-                            matrix[pivotRow*order+column]);
-                    std::swap(pivots[pivotCol],pivots[pivotRow]);
-                }
-                for(std::size_t row=pivotCol+1;row<order;++row)
-                {
-                    const double factor=matrix[row*order+pivotCol]/=
-                        matrix[pivotCol*order+pivotCol];
-                    for(std::size_t column=pivotCol+1;
-                        column<order;++column)
-                        matrix[row*order+column]-=
-                            factor*matrix[pivotCol*order+column];
-                }
-            }
-            std::vector<double> inverse(order*order),work(order);
-            for(std::size_t column=0;column<order;++column)
-            {
-                for(std::size_t row=0;row<order;++row)
-                {
-                    work[row]=pivots[row]==column ? 1.0 : 0.0;
-                    for(std::size_t prior=0;prior<row;++prior)
-                        work[row]-=matrix[row*order+prior]*work[prior];
-                }
-                for(std::size_t row=order;row-->0;)
-                {
-                    for(std::size_t next=row+1;next<order;++next)
-                        work[row]-=matrix[row*order+next]*work[next];
-                    work[row]/=matrix[row*order+row];
-                    inverse[row*order+column]=work[row];
-                }
-            }
-            return inverse;
-        }
     }
     BakedRoomLight GenerateTransport()
     {
@@ -232,9 +177,6 @@ namespace bk::scene
                     faceU[face]*(2*(column+0.5)/PatchSide-1)+
                     faceV[face]*(2*(row+0.5)/PatchSide-1);
                 patch.area=4*Length(Cross(patch.u,patch.v));
-                patch.reflectance=WallAlbedo(patch.center);
-                for(auto& channel:patch.reflectance)
-                    channel*=1-BaseReflectance;
                 result.patches.push_back(patch);
             }
         const std::size_t patchCount=result.patches.size();
@@ -262,7 +204,7 @@ namespace bk::scene
                 result.formFactors.begin()+(receiver+1)*patchCount,0.0);
             const Patch opening{{0,0,front},{0,0,1},
                 {halfWidth,0,0},{0,halfHeight,0},
-                4*halfWidth*halfHeight,{}};
+                4*halfWidth*halfHeight};
             const double available=
                 1-AverageFactor(result.patches[receiver],opening);
             if(rowSum>available) rowScale[receiver]=available/rowSum;
@@ -288,24 +230,6 @@ namespace bk::scene
                         result.patches[source].area*
                             result.formFactors[source*patchCount+receiver]));
         }
-        result.bounceResponse.resize(patchCount*patchCount);
-        for(int channel=0;channel<3;++channel)
-        {
-            std::vector<double> system(patchCount*patchCount);
-            for(std::size_t receiver=0;receiver<patchCount;++receiver)
-            for(std::size_t source=0;source<patchCount;++source)
-                system[receiver*patchCount+source]=
-                    (receiver==source ? 1.0 : 0.0)-
-                    result.patches[receiver].reflectance[channel]*
-                        result.formFactors[receiver*patchCount+source];
-            const auto inverse=Inverse(std::move(system),patchCount);
-            for(std::size_t receiver=0;receiver<patchCount;++receiver)
-            for(std::size_t source=0;source<patchCount;++source)
-                result.bounceResponse[receiver*patchCount+source][channel]=
-                    static_cast<float>(
-                        inverse[receiver*patchCount+source]-
-                        (receiver==source ? 1.0 : 0.0));
-        }
         result.wallSamples.resize(LightingCount);
         result.pointFactors.resize(
             static_cast<std::size_t>(LightingCount)*patchCount);
@@ -322,9 +246,6 @@ namespace bk::scene
             receiver.center=centers[face]+
                 faceU[face]*(2*(column+0.5)/LightingSide-1)+
                 faceV[face]*(2*(row+0.5)/LightingSide-1);
-            receiver.reflectance=WallAlbedo(receiver.center);
-            for(auto& channel:receiver.reflectance)
-                channel*=1-BaseReflectance;
             float* gatherRow=result.pointFactors.data()+
                 static_cast<std::size_t>(sampleIndex)*patchCount;
             double sum=0;
@@ -336,7 +257,7 @@ namespace bk::scene
             }
             const Patch opening{{0,0,front},{0,0,1},
                 {halfWidth,0,0},{0,halfHeight,0},
-                4*halfWidth*halfHeight,{}};
+                4*halfWidth*halfHeight};
             const double available=std::max(0.0,
                 1-PolygonFactor(receiver.center,receiver.normal,opening));
             if(sum>available)
@@ -354,7 +275,6 @@ namespace bk::scene
         head.schema=AssetSchema;
         head.patchCount=transport.patches.size();
         head.formCount=transport.formFactors.size();
-        head.bounceCount=transport.bounceResponse.size();
         head.wallCount=transport.wallSamples.size();
         head.pointCount=transport.pointFactors.size();
         head.hash=TransportHash(transport);
@@ -371,7 +291,6 @@ namespace bk::scene
             stream.write(reinterpret_cast<const char*>(&head),sizeof(head));
             WriteList(stream,transport.patches);
             WriteList(stream,transport.formFactors);
-            WriteList(stream,transport.bounceResponse);
             WriteList(stream,transport.wallSamples);
             WriteList(stream,transport.pointFactors);
             stream.flush();

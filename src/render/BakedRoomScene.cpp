@@ -47,9 +47,9 @@ namespace bk::render
                 float WallLevel;
                 float WallBalance;
                 float WallEntropy;
-                uint WallMode;
                 uint WallPasses;
-                float3 WallPad;
+                float3 WallAlbedo;
+                float WallPad;
                 float StrokeScale;
                 float StrokeWidth;
                 float StrokeHeight;
@@ -61,9 +61,9 @@ namespace bk::render
                 uint StrokeOn;
                 float3 StrokePad;
             };
-            struct Patch { float4 positionArea; float4 normal; float4 reflectance; float4 u; float4 v; };
+            struct Patch { float4 positionArea; float4 normal; float4 u; float4 v; };
             StructuredBuffer<Patch> Patches:register(t0);
-            StructuredBuffer<float4> Response:register(t1);
+            RWStructuredBuffer<float4> WallReflect:register(u5);
             RWStructuredBuffer<float4> Direct:register(u0);
             RWStructuredBuffer<float4> Bounce:register(u1);
             struct Tube { float4 startPoint; float4 endPoint; float4 startNitMm; float4 endNitMm; float4 startSource; float4 endSource; };
@@ -78,6 +78,7 @@ namespace bk::render
             StructuredBuffer<BvhNode> TubeTree:register(t5);
             StructuredBuffer<float> Factors:register(t6);
             RWStructuredBuffer<float4> BounceWork:register(u6);
+            groupshared float3 BounceTile[64];
             struct WallStroke {
                 float4 start;float4 end;float4 startColor;float4 endColor;
             };
@@ -331,8 +332,8 @@ namespace bk::render
             };
             WallState EvalWall(float3 surfacePos,uint face) {
                 WallState wall;
-                wall.albedo=float3(0.68,0.65,0.60)+
-                    0.03*(2*Noise(surfacePos/100)-1);
+                wall.albedo=saturate(WallAlbedo+
+                    0.03*(2*Noise(surfacePos/100)-1));
                 wall.roughness=SurfaceRoughness;
                 wall.normal=2*float2(
                     Noise(surfacePos/10),
@@ -344,7 +345,6 @@ namespace bk::render
                 return wall;
             }
             float3 PatchReflect(Patch patch,uint face) {
-                if(WallMode==0) return patch.reflectance.rgb;
                 return (1-BaseReflectance)*
                     EvalWall(patch.positionArea.xyz,face).albedo;
             }
@@ -379,37 +379,32 @@ namespace bk::render
                         Lines[tubeIndex],patch.positionArea.xyz,patch.normal.xyz);
                 LineIrradiance[patchIndex]=float4(tubeLight,0);
                 uint face=patchIndex/((uint)PatchSide*(uint)PatchSide);
-                float3 direct=PatchReflect(patch,face)*(
+                float3 reflectance=PatchReflect(patch,face);
+                WallReflect[patchIndex]=float4(reflectance,0);
+                float3 direct=reflectance*(
                     SphereCandela*(1e6*PatchOmega(patch,SpherePointMm)/
                         patch.positionArea.w)*SphereEnabled+tubeLight);
                 if(StrokeOn!=0) direct+=PI*StrokePatch(patch,face);
                 Direct[patchIndex]=float4(direct,0);
-                if(WallMode!=0) Bounce[patchIndex]=float4(direct,0);
-            }
-            [numthreads(64,1,1)] void BounceCS(
-                uint patchIndex:SV_DispatchThreadID) {
-                uint patchCount=5*(uint)PatchSide*(uint)PatchSide;
-                if(patchIndex>=patchCount) return;
-                float3 result=0;
-                for(uint sourceIndex=0;sourceIndex<patchCount;++sourceIndex)
-                    result+=Response[patchIndex*patchCount+sourceIndex].rgb*
-                        Direct[sourceIndex].rgb;
-                Bounce[patchIndex]=float4(result,0);
+                Bounce[patchIndex]=float4(direct,0);
             }
             [numthreads(64,1,1)] void BounceStepCS(
-                uint patchIndex:SV_DispatchThreadID) {
+                uint patchIndex:SV_DispatchThreadID,
+                uint lane:SV_GroupIndex) {
                 uint patchCount=5*(uint)PatchSide*(uint)PatchSide;
-                if(patchIndex>=patchCount) return;
                 float3 incident=0;
-                for(uint sourceIndex=0;sourceIndex<patchCount;++sourceIndex)
-                    incident+=Factors[
-                        patchIndex*patchCount+sourceIndex]*
-                        Bounce[sourceIndex].rgb;
-                Patch patch=Patches[patchIndex];
-                uint face=patchIndex/((uint)PatchSide*(uint)PatchSide);
+                for(uint tile=0;tile<patchCount;tile+=64) {
+                    BounceTile[lane]=Bounce[tile+lane].rgb;
+                    GroupMemoryBarrierWithGroupSync();
+                    [unroll] for(uint offset=0;offset<64;++offset)
+                        incident+=Factors[
+                            (tile+offset)*patchCount+patchIndex]*
+                            BounceTile[offset];
+                    GroupMemoryBarrierWithGroupSync();
+                }
                 BounceWork[patchIndex]=float4(
                     Direct[patchIndex].rgb+
-                    PatchReflect(patch,face)*incident,0);
+                    WallReflect[patchIndex].rgb*incident,0);
             }
             [numthreads(64,1,1)] void GatherCS(
                 uint sampleIndex:SV_DispatchThreadID) {
@@ -421,9 +416,7 @@ namespace bk::render
                 for(uint patchIndex=0;patchIndex<patchCount;++patchIndex)
                     irradiance+=WallGather[
                         sampleIndex*patchCount+patchIndex]*
-                        (WallMode==0
-                            ? Direct[patchIndex].rgb+Bounce[patchIndex].rgb
-                            : Bounce[patchIndex].rgb);
+                        Bounce[patchIndex].rgb;
                 for(uint tubeIndex=0;tubeIndex<TubeCount;++tubeIndex)
                     irradiance+=LineBudget[tubeIndex]*IntegrateLine(
                         Lines[tubeIndex],receiver.position.xyz,
@@ -852,9 +845,8 @@ namespace bk::render
             std::uint32_t tubeCount,wallSide,treeCount,debugView;
             float wallTimeSec,wallBands[3];
             float wallLevel,wallBalance,wallEntropy;
-            std::uint32_t wallMode;
             std::uint32_t wallPasses;
-            float wallPad[3];
+            float wallAlbedo[3],wallPad;
             float strokeScale,strokeWidth,strokeHeight,strokeOpacity;
             float strokeTilePx;
             std::uint32_t strokeTileCols,strokeTileRows,strokeShapeCount,strokeOn;
@@ -866,19 +858,19 @@ namespace bk::render
             float startSource[4],endSource[4];
         };
         struct GpuWallSample { float position[4],normal[4]; };
-        struct GpuPatch { float position[4],normal[4],reflectance[4],u[4],v[4]; };
+        struct GpuPatch { float position[4],normal[4],u[4],v[4]; };
     }
     void BakedRoomScene::ValidateShaders()
-    { Compile("LineBudgetCS","cs_5_1");Compile("DirectCS","cs_5_1");Compile("BounceCS","cs_5_1");Compile("BounceStepCS","cs_5_1");Compile("GatherCS","cs_5_1");Compile("FullscreenVS","vs_5_1");Compile("ScenePS","ps_5_1"); }
+    { Compile("LineBudgetCS","cs_5_1");Compile("DirectCS","cs_5_1");Compile("BounceStepCS","cs_5_1");Compile("GatherCS","cs_5_1");Compile("FullscreenVS","vs_5_1");Compile("ScenePS","ps_5_1"); }
     void BakedRoomScene::Initialize(ID3D12Device* device)
     {
         device_=device;
         const auto& transport=scene::BuildTransport();
+        maxRowSum_=transport.maxRowSum;
         std::vector<GpuPatch> patchData;
         for(const auto& p:transport.patches) patchData.push_back({
             {static_cast<float>(p.center.x),static_cast<float>(p.center.y),static_cast<float>(p.center.z),static_cast<float>(p.area)},
             {static_cast<float>(p.normal.x),static_cast<float>(p.normal.y),static_cast<float>(p.normal.z),0},
-            {static_cast<float>(p.reflectance[0]),static_cast<float>(p.reflectance[1]),static_cast<float>(p.reflectance[2]),0},
             {static_cast<float>(p.u.x),static_cast<float>(p.u.y),static_cast<float>(p.u.z),0},{static_cast<float>(p.v.x),static_cast<float>(p.v.y),static_cast<float>(p.v.z),0}});
         const auto immutable=[&](std::size_t bytes,const void* data) {
             auto upload=Buffer(device,bytes,true,data);
@@ -889,11 +881,11 @@ namespace bk::render
             staticUploads_.push_back({upload,gpu});return gpu;
         };
         patches_=immutable(patchData.size()*sizeof(GpuPatch),patchData.data());
-        response_=immutable(transport.bounceResponse.size()*sizeof(transport.bounceResponse[0]),transport.bounceResponse.data());
-        std::vector<float> factors;
-        factors.reserve(transport.formFactors.size());
-        for(const double factor:transport.formFactors)
-            factors.push_back(static_cast<float>(factor));
+        std::vector<float> factors(transport.formFactors.size());
+        for(std::size_t receiver=0;receiver<scene::PatchCount;++receiver)
+            for(std::size_t source=0;source<scene::PatchCount;++source)
+                factors[source*scene::PatchCount+receiver]=static_cast<float>(
+                    transport.formFactors[receiver*scene::PatchCount+source]);
         factors_=immutable(factors.size()*sizeof(float),factors.data());
         wallGather_=immutable(transport.pointFactors.size()*sizeof(float),transport.pointFactors.data());
         std::vector<GpuWallSample> samples;
@@ -903,14 +895,17 @@ namespace bk::render
         wallSamples_=immutable(samples.size()*sizeof(GpuWallSample),samples.data());
         wallAtlas_=Buffer(device,scene::LightingCount*16,false);
         direct_=Buffer(device,scene::PatchCount*16,false);bounce_=Buffer(device,scene::PatchCount*16,false);
+        wallReflect_=Buffer(device,scene::PatchCount*16,false);
         bounceWork_=Buffer(device,scene::PatchCount*16,false);
+        static_assert(scene::PatchCount%64==0);
         lineIrradiance_=Buffer(device,scene::PatchCount*16,false);
         constants_=Buffer(device,2*256,true);
         D3D12_RANGE noRead{0,0};Check(constants_->Map(0,&noRead,reinterpret_cast<void**>(&mapped_)),"Map room constants");
         D3D12_ROOT_PARAMETER parameters[17]{};
         parameters[0].ParameterType=D3D12_ROOT_PARAMETER_TYPE_CBV;
-        parameters[1].ParameterType=parameters[2].ParameterType=D3D12_ROOT_PARAMETER_TYPE_SRV;
-        parameters[2].Descriptor.ShaderRegister=1;
+        parameters[1].ParameterType=D3D12_ROOT_PARAMETER_TYPE_SRV;
+        parameters[2].ParameterType=D3D12_ROOT_PARAMETER_TYPE_UAV;
+        parameters[2].Descriptor.ShaderRegister=5;
         parameters[3].ParameterType=parameters[4].ParameterType=D3D12_ROOT_PARAMETER_TYPE_UAV;
         parameters[4].Descriptor.ShaderRegister=1;
         parameters[5].ParameterType=D3D12_ROOT_PARAMETER_TYPE_SRV;parameters[5].Descriptor.ShaderRegister=2;
@@ -932,10 +927,9 @@ namespace bk::render
         Check(D3D12SerializeRootSignature(&root,D3D_ROOT_SIGNATURE_VERSION_1,&serialized,&error),"Serialize room root");
         Check(device->CreateRootSignature(0,serialized->GetBufferPointer(),serialized->GetBufferSize(),IID_PPV_ARGS(&root_)),"Create room root");
         D3D12_COMPUTE_PIPELINE_STATE_DESC compute{};compute.pRootSignature=root_.Get();
-        const auto budget=Compile("LineBudgetCS","cs_5_1"),direct=Compile("DirectCS","cs_5_1"),bounce=Compile("BounceCS","cs_5_1"),bounceStep=Compile("BounceStepCS","cs_5_1");
+        const auto budget=Compile("LineBudgetCS","cs_5_1"),direct=Compile("DirectCS","cs_5_1"),bounceStep=Compile("BounceStepCS","cs_5_1");
         compute.CS={budget->GetBufferPointer(),budget->GetBufferSize()};Check(device->CreateComputePipelineState(&compute,IID_PPV_ARGS(&lineBudgetPipeline_)),"Create emitter energy conservation pass");
         compute.CS={direct->GetBufferPointer(),direct->GetBufferSize()};Check(device->CreateComputePipelineState(&compute,IID_PPV_ARGS(&directPipeline_)),"Create direct lighting");
-        compute.CS={bounce->GetBufferPointer(),bounce->GetBufferSize()};Check(device->CreateComputePipelineState(&compute,IID_PPV_ARGS(&bouncePipeline_)),"Create diffuse transport");
         compute.CS={bounceStep->GetBufferPointer(),bounceStep->GetBufferSize()};Check(device->CreateComputePipelineState(&compute,IID_PPV_ARGS(&bounceStepPipe_)),"Create changing diffuse transport");
         const auto gather=Compile("GatherCS","cs_5_1");
         compute.CS={gather->GetBufferPointer(),gather->GetBufferSize()};Check(device->CreateComputePipelineState(&compute,IID_PPV_ARGS(&gatherPipeline_)),"Create dense diffuse gather");
@@ -955,7 +949,16 @@ namespace bk::render
         if(!scene::ValidWallField(wallField))
             throw std::invalid_argument("Invalid wall field");
         slot_=slot;width_=width;height_=height;eye_=eye;
-        wallMode_=wallField.mode;wallPasses_=wallField.passes;
+        if(wallAlbedo_!=wallField.albedo || !wallPasses_) {
+            wallAlbedo_=wallField.albedo;
+            const double albedo=*std::max_element(
+                wallAlbedo_.begin(),wallAlbedo_.end());
+            const double ratio=(1-scene::BaseReflectance)*
+                std::min(1.0,albedo+scene::AlbedoVariation)*maxRowSum_;
+            wallPasses_=ratio>0?static_cast<std::uint32_t>(std::max(0.0,
+                std::ceil(std::log(std::numeric_limits<float>::epsilon()*
+                    (1-ratio))/std::log(ratio))-1)):0;
+        }
         scene::Light light;light.position={0,0,scene::BaseLightZmm};light.radius=1;
         if(frame) light=scene::MakeLight(frame->dotXmm,frame->dotYmm,2*frame->dotRadiusMm,{frame->red,frame->green,frame->blue},frame->dotZmm);
         physicalLight_=light;
@@ -1040,8 +1043,7 @@ namespace bk::render
             wallField.timeSec,
             {wallField.bands[0],wallField.bands[1],wallField.bands[2]},
             wallField.level,wallField.balance,wallField.entropy,
-            static_cast<std::uint32_t>(wallField.mode),
-            wallField.passes,{},
+            wallPasses_,{wallAlbedo_[0],wallAlbedo_[1],wallAlbedo_[2]},0,
             strokeView?strokeView->scale:0,
             strokeView?strokeView->width:0,
             strokeView?strokeView->height:0,
@@ -1059,7 +1061,7 @@ namespace bk::render
         const auto cb=constants_->GetGPUVirtualAddress()+slot_*256;
         if(compute) {
             commands->SetComputeRootSignature(root_.Get());commands->SetComputeRootConstantBufferView(0,cb);
-            commands->SetComputeRootShaderResourceView(1,patches_->GetGPUVirtualAddress());commands->SetComputeRootShaderResourceView(2,response_->GetGPUVirtualAddress());
+            commands->SetComputeRootShaderResourceView(1,patches_->GetGPUVirtualAddress());commands->SetComputeRootUnorderedAccessView(2,wallReflect_->GetGPUVirtualAddress());
             commands->SetComputeRootUnorderedAccessView(3,direct_->GetGPUVirtualAddress());commands->SetComputeRootUnorderedAccessView(4,bounce_->GetGPUVirtualAddress());
             commands->SetComputeRootShaderResourceView(8,wallSamples_->GetGPUVirtualAddress());commands->SetComputeRootShaderResourceView(9,wallGather_->GetGPUVirtualAddress());commands->SetComputeRootUnorderedAccessView(10,wallAtlas_->GetGPUVirtualAddress());
             commands->SetComputeRootShaderResourceView(5,lines_[slot_]->GetGPUVirtualAddress());commands->SetComputeRootUnorderedAccessView(6,lineIrradiance_->GetGPUVirtualAddress());commands->SetComputeRootUnorderedAccessView(7,lineBudgets_[slot_]->GetGPUVirtualAddress());
@@ -1071,8 +1073,9 @@ namespace bk::render
             commands->SetComputeRootShaderResourceView(16,strokeIndices_[slot_]->GetGPUVirtualAddress());
         } else {
             commands->SetGraphicsRootSignature(root_.Get());commands->SetGraphicsRootConstantBufferView(0,cb);
-            commands->SetGraphicsRootShaderResourceView(1,patches_->GetGPUVirtualAddress());commands->SetGraphicsRootShaderResourceView(2,response_->GetGPUVirtualAddress());
-            commands->SetGraphicsRootUnorderedAccessView(3,direct_->GetGPUVirtualAddress());commands->SetGraphicsRootUnorderedAccessView(4,bounce_->GetGPUVirtualAddress());
+            commands->SetGraphicsRootShaderResourceView(1,patches_->GetGPUVirtualAddress());commands->SetGraphicsRootUnorderedAccessView(2,wallReflect_->GetGPUVirtualAddress());
+            commands->SetGraphicsRootUnorderedAccessView(3,direct_->GetGPUVirtualAddress());commands->SetGraphicsRootUnorderedAccessView(4,
+                (wallPasses_%2?bounceWork_:bounce_)->GetGPUVirtualAddress());
             commands->SetGraphicsRootShaderResourceView(8,wallSamples_->GetGPUVirtualAddress());commands->SetGraphicsRootShaderResourceView(9,wallGather_->GetGPUVirtualAddress());commands->SetGraphicsRootUnorderedAccessView(10,wallAtlas_->GetGPUVirtualAddress());
             commands->SetGraphicsRootShaderResourceView(5,lines_[slot_]->GetGPUVirtualAddress());commands->SetGraphicsRootUnorderedAccessView(6,lineIrradiance_->GetGPUVirtualAddress());commands->SetGraphicsRootUnorderedAccessView(7,lineBudgets_[slot_]->GetGPUVirtualAddress());
             commands->SetGraphicsRootShaderResourceView(11,tubeTrees_[slot_]->GetGPUVirtualAddress());
@@ -1095,29 +1098,25 @@ namespace bk::render
             }
             staticUploaded_=true;
         }
-        Barrier(commands,direct_.Get());Barrier(commands,bounce_.Get());Barrier(commands,lineIrradiance_.Get());Barrier(commands,wallAtlas_.Get());Bind(commands,true);
+        Barrier(commands,direct_.Get());Barrier(commands,bounce_.Get());Barrier(commands,lineIrradiance_.Get());Barrier(commands,wallAtlas_.Get());Barrier(commands,wallReflect_.Get());Bind(commands,true);
         if(lineCount_) {
             Barrier(commands,lineBudgets_[slot_].Get());commands->SetPipelineState(lineBudgetPipeline_.Get());commands->Dispatch((lineCount_+63)/64,1,1);Barrier(commands,lineBudgets_[slot_].Get());
         }
         commands->SetPipelineState(directPipeline_.Get());commands->Dispatch((scene::PatchCount+63)/64,1,1);Barrier(commands,direct_.Get());Barrier(commands,lineIrradiance_.Get());
-        if(wallMode_==scene::WallMode::Fixed) {
-            commands->SetPipelineState(bouncePipeline_.Get());commands->Dispatch((scene::PatchCount+63)/64,1,1);Barrier(commands,bounce_.Get());
-        } else {
-            Barrier(commands,bounceWork_.Get());
-            Barrier(commands,bounce_.Get());
-            ID3D12Resource* source=bounce_.Get();
-            ID3D12Resource* target=bounceWork_.Get();
-            commands->SetPipelineState(bounceStepPipe_.Get());
-            for(std::uint32_t pass=0;pass<wallPasses_;++pass) {
-                commands->SetComputeRootUnorderedAccessView(4,source->GetGPUVirtualAddress());
-                commands->SetComputeRootUnorderedAccessView(13,target->GetGPUVirtualAddress());
-                commands->Dispatch((scene::PatchCount+63)/64,1,1);
-                Barrier(commands,target);
-                std::swap(source,target);
-            }
+        Barrier(commands,wallReflect_.Get());
+        Barrier(commands,bounceWork_.Get());
+        Barrier(commands,bounce_.Get());
+        ID3D12Resource* source=bounce_.Get();
+        ID3D12Resource* target=bounceWork_.Get();
+        commands->SetPipelineState(bounceStepPipe_.Get());
+        for(std::uint32_t pass=0;pass<wallPasses_;++pass) {
             commands->SetComputeRootUnorderedAccessView(4,source->GetGPUVirtualAddress());
             commands->SetComputeRootUnorderedAccessView(13,target->GetGPUVirtualAddress());
+            commands->Dispatch((scene::PatchCount+63)/64,1,1);
+            Barrier(commands,target);
+            std::swap(source,target);
         }
+        commands->SetComputeRootUnorderedAccessView(4,source->GetGPUVirtualAddress());
         commands->SetPipelineState(gatherPipeline_.Get());commands->Dispatch((scene::LightingCount+63)/64,1,1);Barrier(commands,wallAtlas_.Get());
     }
     void BakedRoomScene::DrawScene(ID3D12GraphicsCommandList* commands)

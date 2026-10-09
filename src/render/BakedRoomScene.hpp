@@ -26,8 +26,8 @@ namespace bk::render
     private:
         void Bind(ID3D12GraphicsCommandList* commands,bool compute);
         Microsoft::WRL::ComPtr<ID3D12RootSignature> root_;
-        Microsoft::WRL::ComPtr<ID3D12PipelineState> lineBudgetPipeline_,directPipeline_,bouncePipeline_,bounceStepPipe_,gatherPipeline_,scenePipeline_;
-        Microsoft::WRL::ComPtr<ID3D12Resource> patches_,response_,factors_,direct_,bounce_,bounceWork_,lineIrradiance_,constants_,wallSamples_,wallGather_,wallAtlas_;
+        Microsoft::WRL::ComPtr<ID3D12PipelineState> lineBudgetPipeline_,directPipeline_,bounceStepPipe_,gatherPipeline_,scenePipeline_;
+        Microsoft::WRL::ComPtr<ID3D12Resource> patches_,wallReflect_,factors_,direct_,bounce_,bounceWork_,lineIrradiance_,constants_,wallSamples_,wallGather_,wallAtlas_;
         std::array<Microsoft::WRL::ComPtr<ID3D12Resource>,2> strokeShapes_,strokeRanges_,strokeIndices_;
         std::vector<std::array<Microsoft::WRL::ComPtr<ID3D12Resource>,2>> staticUploads_;
         bool staticUploaded_{};
@@ -42,10 +42,11 @@ namespace bk::render
         std::uint32_t lineCount_{};
         std::uint32_t treeCount_{},debugView_{};
         std::uint32_t wallPasses_{};
+        std::array<float,3> wallAlbedo_{};
+        double maxRowSum_{};
         std::byte* mapped_{};
         std::uint32_t slot_{},width_{},height_{};
         scene::EyePose eye_{};
         scene::Light physicalLight_{};
-        scene::WallMode wallMode_{scene::WallMode::Fixed};
     };
 }
